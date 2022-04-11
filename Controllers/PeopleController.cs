@@ -11,7 +11,7 @@ using SwapiMVC.Models;
 
 namespace SwapiMVC.Controllers
 {
-    [Route("[controller]")]
+    // [Route("[controller]")]
     public class PeopleController : Controller
     {
         private readonly HttpClient _httpClient;
@@ -28,6 +28,16 @@ namespace SwapiMVC.Controllers
             var responseString = await response.Content.ReadAsStringAsync();
             var people = JsonSerializer.Deserialize<ResultsViewModel<PeopleViewModel>>(responseString);
             return View(people);
+        }
+
+        public async Task<IActionResult> Person(string id)
+        {
+            var response = await _httpClient.GetAsync($"people/{id}");
+            if (id is null || response.IsSuccessStatusCode == false)
+                return RedirectToAction(nameof(Index));
+            var responseString = await response.Content.ReadAsStringAsync();
+            var person = JsonSerializer.Deserialize<PeopleViewModel>(responseString);
+            return View(person);
         }
     }
 }
