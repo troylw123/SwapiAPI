@@ -23,6 +23,12 @@ namespace SwapiMVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // establish new httpClient, named swapi, and use the same base address for all requests
+            // must now inject into each controller
+            services.AddHttpClient("swapi", client =>
+            {
+                client.BaseAddress = new Uri("https://swapi.dev/api/");
+            });
             services.AddControllersWithViews();
         }
 
